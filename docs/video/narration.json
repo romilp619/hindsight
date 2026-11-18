@@ -1,0 +1,52 @@
+[
+ {
+  "id": "00_intro",
+  "slot": 7.0,
+  "text": "Every company repeats its mistakes, because nobody remembers them. Hindsight does."
+ },
+ {
+  "id": "01_create",
+  "slot": 19.87,
+  "text": "Hindsight is a Forge app for Jira. It has read twelve finished projects at Northwind Pay: how late they shipped, what broke, and what the retros said. Now the team starts something new: moving checkout payments to Stripe Payment Intents."
+ },
+ {
+  "id": "02_panel",
+  "slot": 30.36,
+  "text": "Seconds later, Hindsight comments on the epic: high risk, about eighteen days of slip. The panel shows why. Three comparable payments projects all shipped late, and two caused Sev-2 incidents, including duplicate charges for over a thousand customers. Every number comes from Jira data, and every claim links to its evidence."
+ },
+ {
+  "id": "03_tasks",
+  "slot": 14.0,
+  "text": "A warning isn't enough. One click turns the lessons from past retros into real tasks on the epic."
+ },
+ {
+  "id": "04_child",
+  "slot": 6.13,
+  "text": "Five tasks, straight from history."
+ },
+ {
+  "id": "05_rovo",
+  "slot": 30.0,
+  "text": "The same intelligence is a Rovo agent. Anyone can ask it, in plain language, what went wrong last time. Its skills and actions are reusable, so other agents can call Hindsight too."
+ },
+ {
+  "id": "06_answer",
+  "slot": 26.67,
+  "text": "It answers with a verdict: high risk, about eighteen days of slip. Then the past projects behind it, what to do differently this time, and who to ask. It even notices that the lessons are already tasks on this epic."
+ },
+ {
+  "id": "07_cli",
+  "slot": 30.57,
+  "text": "Hindsight also exposes an MCP server, through Forge. Here, a plain terminal command calls it directly: same forecast, same evidence, without opening Jira. So any AI assistant, like Claude, Cursor or Codex, can check the company's history before writing code."
+ },
+ {
+  "id": "08_claude",
+  "slot": 29.33,
+  "text": "That means AI coding assistants can use it too. Before Claude writes a single line of webhook code, it checks the company's history, and plans for idempotency, load tests and alerts from day one."
+ },
+ {
+  "id": "09_outro",
+  "slot": 7.0,
+  "text": "Hindsight. Twenty-twenty vision, before you start. Built on Atlassian Forge, with Rovo and MCP."
+ }
+]

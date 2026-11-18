@@ -1,2 +1,7 @@
 node_modules/
 .env
+
+# demo video intermediates (large)
+docs/video/narration.wav
+docs/video/vo/
+docs/video/vo_kokoro/

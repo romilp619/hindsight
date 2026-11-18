@@ -17,7 +17,22 @@ actually happened to it (schedule slip, bugs, incidents, retro notes), and posts
 
 More in [docs/SCREENSHOTS.md](docs/SCREENSHOTS.md).
 
-Category: **Apps for Software Teams**. Bonus prizes: **Rovo agent**, **MCP**, **Teamwork Graph** and **Marketplace**.
+Category: **Apps for Software Teams**. Built with **Rovo agents**, **Atlassian MCP** and the **Teamwork Graph**.
+
+## For judges: try it in 5 minutes
+
+No build and no credentials needed: Hindsight runs on Atlassian (Forge, production environment).
+
+1. **Install** with the installation link in [`docs/INSTALL-LINK.txt`](docs/INSTALL-LINK.txt) (also in the Devpost submission) on a Jira site where you're an admin.
+2. Open any Jira **software** space → **Hindsight** tab → **Load sample history** (about 1 minute; creates 12 finished sample epics with incidents and retro comments, clearly labelled as fictional "Northwind Pay" data).
+3. Create an **Epic** named `Move checkout card payments to Stripe Payment Intents`.
+4. Within about 20 seconds Hindsight comments on the epic with a pre-mortem. Open the full forecast with the **Apps (⬡) button under the title → Hindsight**.
+5. Click **Add 5 lessons as tasks** → refresh, and the tasks appear under **Child work items**.
+6. **Rovo** (sites with Rovo): Ask Rovo → agent picker → **Hindsight** → "What went wrong last time we touched payments?"
+7. **MCP:** admin.atlassian.com → Apps → Sites → your site → Connected apps → Hindsight → View app details → **Tools → Enable tools**. Endpoint: `https://mcp.atlassian.com/forge/c01bdc09-a28c-4c76-9751-a77dd264f422`
+8. **Teamwork Graph (optional):** same app page → Connections → Teamwork Graph connectors → **Hindsight → Connect**.
+
+When you're done, **Remove sample data** on the Hindsight tab deletes everything it created. Demo video and screenshots: [`docs/submission-screenshots/`](docs/submission-screenshots/).
 
 ---
 

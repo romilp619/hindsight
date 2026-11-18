@@ -32,7 +32,7 @@ No build and no credentials needed: Hindsight runs on Atlassian (Forge, producti
 7. **MCP:** admin.atlassian.com → Apps → Sites → your site → Connected apps → Hindsight → View app details → **Tools → Enable tools**. Endpoint: `https://mcp.atlassian.com/forge/c01bdc09-a28c-4c76-9751-a77dd264f422`
 8. **Teamwork Graph (optional):** same app page → Connections → Teamwork Graph connectors → **Hindsight → Connect**.
 
-When you're done, **Remove sample data** on the Hindsight tab deletes everything it created. Demo video and screenshots: [`docs/submission-screenshots/`](docs/submission-screenshots/).
+When you're done, **Remove sample data** on the Hindsight tab deletes everything it created. Screenshots: [`docs/submission-screenshots/`](docs/submission-screenshots/).
 
 ---
 

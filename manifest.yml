@@ -1,0 +1,205 @@
+modules:
+  # ── Jira surfaces ────────────────────────────────────────────────
+  jira:issuePanel:
+    - key: hindsight-panel
+      resource: panel
+      resolver:
+        function: resolver
+      render: native
+      title: Hindsight
+      icon: resource:icons;hindsight.svg
+  jira:projectPage:
+    - key: hindsight-home
+      resource: home
+      resolver:
+        function: resolver
+      render: native
+      title: Hindsight
+
+  # ── Automatic pre-mortem + learning loop ─────────────────────────
+  trigger:
+    - key: hindsight-on-create
+      function: onIssueCreated
+      events:
+        - avi:jira:created:issue
+    - key: hindsight-on-update
+      function: onIssueUpdated
+      events:
+        - avi:jira:updated:issue
+
+  # ── Rovo: agent, reusable skill, reusable actions ────────────────
+  rovo:agent:
+    - key: hindsight-agent
+      name: Hindsight
+      description: Runs evidence-based pre-mortems from how your organisation's past
+        work actually went - slips, incidents and retros.
+      icon: resource:icons;hindsight.svg
+      prompt: resource:prompts;agent-prompt.txt
+      conversationStarters:
+        - What went wrong last time we did something like this?
+        - Run a pre-mortem on this epic
+        - Who has done this kind of work before?
+        - Add the lessons from history as tasks
+      followUpPrompt: Suggest one short, useful next step, such as adding a lesson as
+        a task, asking an expert, or checking another past project.
+      actions:
+        - find-similar-work
+        - get-forecast
+        - add-lessons-as-tasks
+        - get-experts
+      skills:
+        - hindsight-premortem
+  rovo:skill:
+    - key: hindsight-premortem
+      source:
+        dir: skills/hindsight-premortem
+      dependencies:
+        tools:
+          - find-similar-work
+          - get-forecast
+          - get-experts
+  action:
+    - key: find-similar-work
+      name: Find similar past work
+      function: findSimilarWork
+      actionVerb: GET
+      description: >-
+        Find finished projects similar to planned work and what happened to them
+        (slip, bugs, incidents, retros), plus a risk forecast, lessons and
+        experts. Use before work starts or when asked "have we done this
+        before?".
+      inputs:
+        description:
+          title: Planned work
+          type: string
+          required: true
+          description: One or two sentences describing the work being planned, e.g.
+            "Migrate card payments to Stripe v3".
+        details:
+          title: Extra details
+          type: string
+          required: false
+          description: Optional longer description of scope.
+    - key: get-forecast
+      name: Get Hindsight forecast
+      function: getForecast
+      actionVerb: GET
+      description: >-
+        Get the Hindsight pre-mortem for a Jira work item (usually an epic):
+        risk, predicted slip in days, the similar past projects it is based on,
+        lessons and people who have done this before.
+      inputs:
+        issueKey:
+          title: Issue key
+          type: string
+          required: false
+          description: Jira issue key such as PAY-123. Defaults to the issue currently open.
+    - key: add-lessons-as-tasks
+      name: Add lessons as tasks
+      function: addLessons
+      actionVerb: CREATE
+      description: >-
+        Create Jira tasks under the work item from the lessons in its Hindsight
+        forecast. Only call this when the user asks to add lessons or tasks.
+      inputs:
+        issueKey:
+          title: Issue key
+          type: string
+          required: false
+          description: Jira issue key such as PAY-123. Defaults to the issue currently open.
+        lessonIds:
+          title: Lesson ids
+          type: string
+          required: false
+          description: Comma-separated lesson ids from get-forecast. Omit to add all
+            lessons that are not already tasks.
+    - key: get-experts
+      name: Find people who have done this before
+      function: getExperts
+      actionVerb: GET
+      description: >-
+        Find the people who led similar past work or fixed its incidents, with
+        their teams from the Teamwork Graph.
+      inputs:
+        topic:
+          title: Topic
+          type: string
+          required: true
+          description: The kind of work, e.g. "payment webhooks" or "Postgres upgrade".
+
+  # ── MCP: the same tools for Claude, Cursor, Codex … ──────────────
+  rovo:mcp:
+    - key: hindsight-mcp
+      name: Hindsight
+      tools:
+        - find-similar-work
+        - get-forecast
+        - get-experts
+
+  # ── Forge LLMs (Atlassian-hosted) ────────────────────────────────
+  llm:
+    - key: hindsight-llm
+      model:
+        - claude
+
+  # ── Teamwork Graph: publish forecasts into the graph ─────────────
+  graph:connector:
+    - key: hindsight-connector
+      name: Hindsight
+      capabilities:
+        replicatesPermissions: false
+        syncFidelity: upsert
+        supportsIncrementalSync: true
+      icons:
+        light: https://raw.githubusercontent.com/REPLACE_ME/hindsight/main/static/icons/hindsight.svg
+        dark: https://raw.githubusercontent.com/REPLACE_ME/hindsight/main/static/icons/hindsight.svg
+      objectTypes:
+        - atlassian:document
+      datasource:
+        onConnectionChange:
+          function: onConnectionChange
+
+  function:
+    - key: resolver
+      handler: index.handler
+    - key: onIssueCreated
+      handler: index.onIssueCreated
+    - key: onIssueUpdated
+      handler: index.onIssueUpdated
+    - key: findSimilarWork
+      handler: index.findSimilarWorkAction
+    - key: getForecast
+      handler: index.getForecastAction
+    - key: addLessons
+      handler: index.addLessonsAction
+    - key: getExperts
+      handler: index.getExpertsAction
+    - key: onConnectionChange
+      handler: index.onConnectionChange
+
+resources:
+  - key: panel
+    path: src/frontend/panel.jsx
+  - key: home
+    path: src/frontend/home.jsx
+  - key: icons
+    path: static/icons
+  - key: prompts
+    path: prompts
+
+permissions:
+  scopes:
+    - read:jira-work
+    - write:jira-work
+    - read:jira-user
+    - storage:app
+    - read:graph:user:atlassian
+    - read:graph:team:atlassian
+    - write:object:jira
+    - read:object:jira
+    - delete:object:jira
+
+app:
+  runtime:
+    name: nodejs22.x
+  id: ari:cloud:ecosystem::app/c01bdc09-a28c-4c76-9751-a77dd264f422
